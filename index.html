@@ -120,12 +120,29 @@
 
         const container = document.querySelector('.container');
         const rect = container.getBoundingClientRect();
+        const yesRect = yesBtn.getBoundingClientRect();
 
         const maxX = rect.width - noBtn.offsetWidth;
         const maxY = rect.height - noBtn.offsetHeight;
 
-        const randomX = Math.random() * maxX;
-        const randomY = Math.random() * maxY;
+        // Keep trying random positions until we find one that doesn't overlap "Sì"
+        let randomX, randomY, attempts = 0;
+        do {
+            randomX = Math.random() * maxX;
+            randomY = Math.random() * maxY;
+
+            // noBtn absolute position in page coords
+            const nLeft = rect.left + randomX;
+            const nTop = rect.top + randomY;
+            const nRight = nLeft + noBtn.offsetWidth;
+            const nBottom = nTop + noBtn.offsetHeight;
+
+            const overlaps = !(nRight < yesRect.left || nLeft > yesRect.right ||
+                               nBottom < yesRect.top || nTop > yesRect.bottom);
+
+            if (!overlaps) break;
+            attempts++;
+        } while (attempts < 50);
 
         noBtn.style.left = randomX + 'px';
         noBtn.style.top = randomY + 'px';
