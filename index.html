@@ -137,6 +137,10 @@
     }
 
     noBtn.addEventListener('mouseover', moveButton);
+    noBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        moveButton();
+    }, { passive: false });
 
     yesBtn.addEventListener('click', () => {
         document.body.innerHTML = `
